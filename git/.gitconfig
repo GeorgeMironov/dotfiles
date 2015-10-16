@@ -1,0 +1,31 @@
+[user]
+    name = Georgy Mironov
+[alias]
+    l = log --pretty=format:'%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s' --date=short
+    s = status -s
+    amend = commit --amend --reuse-message=HEAD
+[branch]
+    autosetuprebase = always
+[core]
+    excludesfile = ~/.gitignore
+    pager = less -x1,5
+	autocrlf = input
+[credential]
+    helper = cache
+[diff]
+    compactionHeuristic = true
+    indentHeuristic = on
+[filter "trimWhitespace"]
+    clean = -
+    clean = git
+[help]
+    autocorrect = 1
+[pull]
+    rebase = true
+[push]
+    default = current
+[rebase]
+    autoStash = true
+[rerere]
+    enabled = true
+    autoupdate = true
