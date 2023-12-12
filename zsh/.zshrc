@@ -7,9 +7,14 @@ setopt ignoreeof
 autoload -U select-word-style
 select-word-style bash
 
+export HISTSIZE=1000000000
+export SAVEHIST=1000000000
+
+export LC_ALL=en_US.UTF-8
 export PATH="$PATH:$HOME/.local/bin"
 
 command -v eza &>/dev/null && alias ls='eza -aF' || alias ls='ls --color=auto -hAF'
+command -v fdfind &>/dev/null && alias fd='fdfind'
 command -v fd &>/dev/null && alias fd='fd --hidden --no-ignore --follow' || alias fd='find . -name'
 command -v rg &>/dev/null && alias rg='rg --hidden --no-ignore --follow --smart-case'
 
@@ -26,19 +31,22 @@ alias cp='cp -r'
 alias scp='scp -r'
 alias cl='clear'
 alias rsync='rsync -a -v -h'
+alias k='kubectl'
+alias bazel='bazelisk'
 
 RED="%F{1}"
 GREEN="%F{2}"
+MAGENTA="%F{5}"
 GREY="%F{7}"
 LIGHT_BLUE="%F{14}"
 
 if [[ -n $SSH_CLIENT ]]; then
-  HOST_COLOR=$RED
+  HOST_COLOR=$MAGENTA
 else
   HOST_COLOR=$GREEN
 fi
 
-PROMPT="%B${HOST_COLOR}%n@%m ${GREY}%* %f[%~]"$'\n'"${LIGHT_BLUE}~> %b%f"
+PROMPT="%B${HOST_COLOR}%n@%20>...>%m%>> ${GREY}%* %f[%~]"$'\n'"${LIGHT_BLUE}~> %b%f"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -52,10 +60,10 @@ if command -v brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
   autoload -Uz compinit
   compinit
-fi
 
-if test -f $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh; then
-  source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  if test -f $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh; then
+    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  fi
 fi
 
 
