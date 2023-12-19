@@ -11,8 +11,6 @@ export EDITOR=vim
 
 export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude ".git"'
 
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
@@ -23,48 +21,41 @@ if [[ $- == *i* ]]; then
     BOLD="\[$(tput bold)\]"
     RED="\[$(tput setaf 1)\]"
     GREEN="\[$(tput setaf 2)\]"
+    MAGENTA="\[$(tput setaf 5)\]"
     GREY="\[$(tput setaf 7)\]"
     LIGHT_BLUE="\[$(tput setaf 14)\]"
     RESET="\[$(tput sgr0)\]"
 fi
 
 if [[ -n $SSH_CLIENT ]]; then
-    export DISPLAY=:10
-    HOST_COLOR=$RED
+    HOST_COLOR=$MAGENTA
 else
     HOST_COLOR=$GREEN
 fi
 
-PS1="${BOLD}${HOST_COLOR}\u@\h ${GREY}\D{%T} ${RESET}${BOLD}[\w]${GREY}\$(__git_ps1)${LIGHT_BLUE}\n#${RESET} "
+_hostname=$(hostname | awk -F '' '{if (NF > 20) {print substr($0, 0, 21)"..."} else print $0}')
+PS1="${BOLD}${HOST_COLOR}\u@$_hostname ${GREY}\D{%T} ${RESET}${BOLD}[\w]${GREY}\$(__git_ps1)${LIGHT_BLUE}\n#${RESET} "
 
-alias ll='ls --color=auto -AlohF'
+command -v fdfind &>/dev/null && alias fd='fdfind'
+command -v fd &>/dev/null && alias fd='fd --hidden --no-ignore --follow' || alias fd='find . -name'
+command -v rg &>/dev/null && alias rg='rg --hidden --no-ignore --follow --smart-case'
+
+alias ls='ls --color=auto -hAF'
+alias ll='ls -l'
 alias grep='grep --color=auto'
-alias df='df -h -x"squashfs"'
+alias df='df -h'
 alias du='du -sh'
 alias vi='vim'
 alias sudo='sudo '
-alias py='python'
-alias ipy='ipython'
-alias o='xdg-open'
+alias py='python3'
+alias ipy='ipython3'
 alias mkdir='mkdir -p'
 alias cp='cp -r'
 alias scp='scp -r'
 alias cl='clear'
-
-if hash subl 2>/dev/null ; then
-    alias s='subl'
-fi
-if hash subl3 2>/dev/null ; then
-    alias s='subl3'
-fi
-
-if [ -f "$HOME/.spbashrc" ]; then
-    . $HOME/.spbashrc
-fi
-
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
+alias rsync='rsync -a -v -h'
+alias k='kubectl'
+alias bazel='bazelisk'
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
